@@ -3,10 +3,10 @@
 // const assert = chai.assert;
 
 // Sinon is a library used for mocking or verifying function calls in JavaScript.
-const sinon = require('sinon');
-const axios = require('axios');
+// const sinon = require('sinon');
 
 const admin = require('firebase-admin');
+
 // Require and initialize firebase-functions-test in "online mode" with your project's
 // credentials and service account key.
 const projectConfig = {
@@ -14,19 +14,21 @@ const projectConfig = {
   databaseURL: 'https://logtest-demo.firebaseio.com'
 };
 const test = require('firebase-functions-test')(projectConfig, './test/logtest-demo-firebase-adminsdk-b246u-1df060c162.json');
+const myFunctions = require('../index');
+const db = admin.firestore();
+const util = require('./util');
 
 describe('Cloud Functions', () => {
-  let myFunctions;
-
-  beforeAll(() => {
-    myFunctions = require('../index');
-  });
 
   afterAll(() => {
     // Do cleanup tasks.
     test.cleanup();
+  });
+
+  afterEach(async () => {
     // Reset the database.
-    // admin.database().ref('messages').remove();
+    const colRef = db.collection("messages");
+    await util.deleteCollection(db, colRef, 500);
   });
 
   
