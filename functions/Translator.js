@@ -2,7 +2,7 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 const db = admin.firestore();
 const timestamp = admin.firestore.FieldValue.serverTimestamp();
-const FirestoreClient = require('./FireStoreClient');
+const FireStoreClient = require('./FireStoreClient');
 
 
 module.exports = class Translator {
@@ -21,7 +21,7 @@ module.exports = class Translator {
       translationGroupId: "1",
       createdAt: timestamp
     };
-    const firestore = new FirestoreClient(db);
+    const firestore = new FireStoreClient(db);
     const matchedMessages  = await firestore.getMatchedRawMessages(errorMsg);
 
     if (matchedMessages.length) {

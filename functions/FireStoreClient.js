@@ -1,6 +1,6 @@
 
 
-module.exports = class FirestoreClient {
+module.exports = class FireStoreClient {
   constructor(db) {
     this.db = db;
   };
@@ -38,6 +38,13 @@ module.exports = class FirestoreClient {
 
   async saveRawMessage(msgObj) {
     this.db.collection('RawMessage').add(msgObj)
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  async saveMessage(msgObj) {
+    await this.db.collection('Message').add(msgObj)
       .catch(error => {
         console.error(error);
       });
