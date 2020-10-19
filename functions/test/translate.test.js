@@ -65,7 +65,6 @@ describe('#Translate', () => {
 
   context('when the matched translationGroupId is registered', () => {
     it('returns the translation template', async (done) => {
-      // A fake request object, with req.query.text set to 'input'
       const req = { body: { body: 'Error: This is test', locale: 'ja' } };
       
       const res = {
@@ -86,7 +85,6 @@ describe('#Translate', () => {
   context('when the matched translationGroupId is not registered', () => {
     context('when the mached translationGroup does not exist', () => { 
       it('returns the raw error message', async (done) => {
-        // A fake request object, with req.query.text set to 'input'
         const req = { body: { body: 'Error: hogehoge', locale: 'ja' } };
         
         const res = {
@@ -106,7 +104,6 @@ describe('#Translate', () => {
     });
     context('when the translation template does not exist', () => { 
       it('returns the raw error message', async (done) => {
-        // A fake request object, with req.query.text set to 'input'
         const req = { body: { body: 'Error: fugafuga', locale: 'ja' } };
         
         const res = {
@@ -142,7 +139,6 @@ describe('#Translate', () => {
         await db.collection('TranslationGroup').doc(docId).collection("Translations").add(sub);
       });
       it('returns the translation template', async (done) => {
-        // A fake request object, with req.query.text set to 'input'
         const req = { body: { body: 'ScriptParseError: This is test', locale: 'ja' } };
         
         const res = {
@@ -164,7 +160,6 @@ describe('#Translate', () => {
   });
   context('when requestBody is blank', () => {
     it('throws error 400', async (done) => {
-      // A fake request object, with req.query.text set to 'input'
       const req = { body: '' };
       
       const res = {
