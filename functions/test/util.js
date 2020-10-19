@@ -1,10 +1,4 @@
-// const admin = require('firebase-admin');
-// admin.initializeApp({
-//     credential: admin.credential.cert("./test/logtest-demo-firebase-adminsdk-b246u-1df060c162.json"),
-//     databaseURL: 'https://logtest-demo.firebaseio.com',
-// });
 
-//firebaseのサイトにあるコード（少し改修）
 module.exports.deleteCollection = (db, collectionRef, batchSize) => {
   const query = collectionRef.orderBy('__name__').limit(batchSize);
   return new Promise((resolve, reject) => {
@@ -48,9 +42,3 @@ const deleteQueryBatch = (db, query, batchSize, resolve, reject) => {
       })
       .catch(reject);
 }
-
-
-
-//実行
-// const colRef = db.collection("members");
-// deleteCollection(db, colRef, 500);

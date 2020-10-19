@@ -22,10 +22,9 @@ module.exports = class Translator {
       createdAt: timestamp
     };
     const firestore = new FireStoreClient(db);
-    const matchedMessages  = await firestore.getMatchedRawMessages(errorMsg);
+    const matchedTranslationGroupId = await firestore.getMatchedGroupId(errorMsg);
 
-    if (matchedMessages.length) {
-      const matchedTranslationGroupId = matchedMessages[0].translationGroupId;
+    if (matchedTranslationGroupId && matchedTranslationGroupId !== '1') {
       const translationData = await firestore.getTranslationTemplate(matchedTranslationGroupId, locale);
       response.result = `${translationData.template} ${translationData.nextAction}`;
       return response;
@@ -38,7 +37,7 @@ module.exports = class Translator {
 
     if (errorMsg.startsWith(preffix) && errorMsg.endsWith(suffix)) {
       const translation = await firestore.getTranslationTemplate(groupId, locale);
-      if (!translation) {
+      if (!Object.keys(translation).length) {
         firestore.saveRawMessage(rawMessage);
         response.result = errorMsg;
         return response;

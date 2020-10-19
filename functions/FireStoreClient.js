@@ -11,8 +11,10 @@ module.exports = class FireStoreClient {
     await this.db.collection('TranslationGroup').where('preffix', '<=', errorMsg).orderBy('preffix').get()
       .then(querySnapshot => {
         const docs = querySnapshot.docs;
-        docId = docs.slice(-1)[0].id;
-        translationGroup = docs.slice(-1)[0].data();
+        if (docs.length) { 
+          docId = docs.slice(-1)[0].id;
+          translationGroup = docs.slice(-1)[0].data();
+        }
       })
       .catch(error => {
         console.error(error);
@@ -28,7 +30,9 @@ module.exports = class FireStoreClient {
     await this.db.collection('TranslationGroup').doc(docId).collection('Translations').where('locale', '==', locale).get()
       .then(querySnapshot => {
         const docs = querySnapshot.docs;
-        translation = docs[0].data();
+        if (docs.length) { 
+          translation = docs[0].data();
+        }
       })
       .catch(error => {
         console.error(error);
@@ -72,18 +76,21 @@ module.exports = class FireStoreClient {
     return msgIds;
   };
 
-  async getMatchedRawMessages(errorMsg) {
-    let messages = [];
+  async getMatchedGroupId(errorMsg) {
+    let message = '';
     await this.db.collection("RawMessage").where('value', '==', errorMsg).get()
       .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          messages.push(doc.data());
-        });
+        const docs = querySnapshot.docs;
+        if (docs.length) {
+          message = docs[0].data();
+        }
       })
       .catch(error => {
         console.error(error);
       });
     
-    return messages;
+    let groupId = message.translationGroupId;
+    
+    return groupId;
   };
 }

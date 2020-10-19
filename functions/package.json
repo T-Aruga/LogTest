@@ -25,7 +25,10 @@
     "sinon": "^9.2.0"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./test/setupTestFramework.js"
+    ]
   },
   "private": true
 }
