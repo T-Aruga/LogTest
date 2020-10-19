@@ -83,7 +83,7 @@ describe('#Translate', () => {
     });
   });
   context('when the matched translationGroupId is not registered', () => {
-    context('when the mached translationGroup does not exist', () => { 
+    context('when the matched translationGroup does not exist', () => { 
       it('returns the raw error message', async (done) => {
         const req = { body: { body: 'Error: hogehoge', locale: 'ja' } };
         
@@ -158,7 +158,7 @@ describe('#Translate', () => {
     });
     
   });
-  context('when requestBody is blank', () => {
+  context('when request body is blank', () => {
     it('throws error 400', async (done) => {
       const req = { body: '' };
       

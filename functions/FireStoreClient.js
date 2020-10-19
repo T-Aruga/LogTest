@@ -17,9 +17,9 @@ module.exports = class FireStoreClient {
         }
       })
       .catch(error => {
-        console.error(error);
+        throw new Error(error);
       });
-    result.docId = docId;
+    if (docId) result.docId = docId;
     Object.assign(result, translationGroup);
   
     return result;
@@ -35,29 +35,23 @@ module.exports = class FireStoreClient {
         }
       })
       .catch(error => {
-        console.error(error);
+        throw new Error(error);
       });
     return translation;
   };
 
   async saveRawMessage(msgObj) {
-    this.db.collection('RawMessage').add(msgObj)
+    const writeResult = await this.db.collection('RawMessage').add(msgObj)
       .catch(error => {
-        console.error(error);
+        throw new Error(error);
       });
-  };
-
-  async saveMessage(msgObj) {
-    await this.db.collection('Message').add(msgObj)
-      .catch(error => {
-        console.error(error);
-      });
+    return writeResult.id;
   };
 
   async updateRawMessage(msgId, msgObj) {
-    this.db.doc(`RawMessage/${msgId}`).update(msgObj)
+    await this.db.doc(`RawMessage/${msgId}`).update(msgObj)
       .catch(error => {
-        console.error(error);
+        throw new Error(error);
       });
   };
 
@@ -70,14 +64,15 @@ module.exports = class FireStoreClient {
         });
       })
       .catch(error => {
-        console.error(error);
+        throw new Error(error);
       });
     
     return msgIds;
   };
 
   async getMatchedGroupId(errorMsg) {
-    let message = '';
+    let message = {};
+    let groupId = '';
     await this.db.collection("RawMessage").where('value', '==', errorMsg).get()
       .then(querySnapshot => {
         const docs = querySnapshot.docs;
@@ -86,10 +81,10 @@ module.exports = class FireStoreClient {
         }
       })
       .catch(error => {
-        console.error(error);
+        throw new Error(error);
       });
     
-    let groupId = message.translationGroupId;
+    if (message.translationGroupId) groupId = message.translationGroupId;
     
     return groupId;
   };

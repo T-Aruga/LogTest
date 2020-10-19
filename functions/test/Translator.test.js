@@ -66,7 +66,7 @@ describe('#Translate', () => {
     });
   });
   context('when the matched translationGroupId is not registered', () => {
-    context('when the mached translationGroup does not exist', () => { 
+    context('when the matched translationGroup does not exist', () => { 
       it('returns the raw error message', async () => {
         const errorMsg = "Error: hogehoge";
         const locale = "ja";
