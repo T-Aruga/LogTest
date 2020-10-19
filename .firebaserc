@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "logtest-80b1f"
+    "realease": "logtest-80b1f",
+    "develop": "logtest-demo"
   }
 }
