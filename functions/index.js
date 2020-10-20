@@ -10,7 +10,7 @@ module.exports.translate = f.https.onRequest(async (req, res) => {
   res.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST');
   if (req.method == "OPTIONS") {
     cors(req, res, () => {
-      response.status(200).send()
+      res.status(200).send()
     });
     return
   }
