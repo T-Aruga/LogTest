@@ -8,6 +8,6 @@ module.exports = {
   },
   output: {
     path: __dirname + '/dist',
-    filename: 'sample.js'
+    filename: 'main.js'
   }
 };
