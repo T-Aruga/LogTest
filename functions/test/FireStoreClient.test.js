@@ -1,12 +1,13 @@
 const admin = require('firebase-admin');
 admin.initializeApp({
-    credential: admin.credential.cert("./test/logtest-demo-firebase-adminsdk-b246u-1df060c162.json"),
+    credential: admin.credential.cert('./test/logtest-demo-firebase-adminsdk-b246u-1df060c162.json'),
     databaseURL: 'https://logtest-demo.firebaseio.com',
 });
 const db = admin.firestore();
 const FireStoreClient = require('../FireStoreClient');
 const timestamp = admin.firestore.FieldValue.serverTimestamp();
 const util = require('./util');
+const projectID = 'logtest-demo';
 
 
 
@@ -19,22 +20,22 @@ describe('FireStoreClient', () => {
 
   beforeAll(async () => {
     let group = {
-      preffix: "Error:",
-      suffix: "test",
+      preffix: 'Error:',
+      suffix: 'test',
       createdAt: timestamp
     };
     let sub = {
-      locale: "ja",
-      template: "これはテストエラーです。",
-      nextAction: "CSに連絡してください。",
+      locale: 'ja',
+      template: 'これはテストエラーです。',
+      nextAction: 'CSに連絡してください。',
       createdAt: timestamp
     };
     const writeResult = await db.collection('TranslationGroup').add(group);
     const docId = writeResult.id;
-    await db.collection('TranslationGroup').doc(docId).collection("Translations").add(sub);
+    await db.collection('TranslationGroup').doc(docId).collection('Translations').add(sub);
     let msg = {
-      value: "Error: This is test",
-      locale: "ja",
+      value: 'Error: This is test',
+      locale: 'ja',
       translationGroupId: docId,
       createdAt: timestamp
     };
@@ -48,7 +49,7 @@ describe('FireStoreClient', () => {
 
   afterEach(async () => {
     // Reset the database.
-    const colRef = db.collection("RawMessage");
+    const colRef = db.collection('RawMessage');
     await util.deleteCollection(db, colRef, 500);
   });
 
@@ -63,8 +64,8 @@ describe('FireStoreClient', () => {
       it('returns the matched translationGroup', async () => {
         const errorMsg = 'Error: This is test';
         return firestore.getMatchedTranslationGroup(errorMsg).then(response => {
-          expect(response.preffix).toBe("Error:");
-          expect(response.suffix).toBe("test");
+          expect(response.preffix).toBe('Error:');
+          expect(response.suffix).toBe('test');
         });
       });
     });
@@ -81,26 +82,26 @@ describe('FireStoreClient', () => {
     let docId = '';
     beforeAll(async () => {
       let group = {
-        preffix: "ScriptParseError:",
-        suffix: "test",
+        preffix: 'ScriptParseError:',
+        suffix: 'test',
         createdAt: timestamp
       };
       let sub = {
-        locale: "ja",
-        template: "スクリプトエラーです。",
-        nextAction: "値を確認してください。",
+        locale: 'ja',
+        template: 'スクリプトエラーです。',
+        nextAction: '値を確認してください。',
         createdAt: timestamp
       };
       const writeResult = await db.collection('TranslationGroup').add(group);
       docId = writeResult.id;
-      await db.collection('TranslationGroup').doc(docId).collection("Translations").add(sub);
+      await db.collection('TranslationGroup').doc(docId).collection('Translations').add(sub);
     });
     context('when the macthed translation template exists', () => {
       it('returns the matched translation template', async () => {
         const locale = 'ja';
         return firestore.getTranslationTemplate(docId, locale).then(response => {
-          expect(response.template).toBe("スクリプトエラーです。");
-          expect(response.nextAction).toBe("値を確認してください。");
+          expect(response.template).toBe('スクリプトエラーです。');
+          expect(response.nextAction).toBe('値を確認してください。');
         });
       });
     });
@@ -117,9 +118,9 @@ describe('FireStoreClient', () => {
     context('with valid params', () => {
       it('should save the raw message', async () => {
         let msg = {
-          value: "Error: hogehoge",
-          locale: "ja",
-          translationGroupId: "1",
+          value: 'Error: hogehoge',
+          locale: 'ja',
+          translationGroupId: '1',
           createdAt: timestamp
         };
         const docId = await firestore.saveRawMessage(msg);
@@ -134,9 +135,9 @@ describe('FireStoreClient', () => {
     let docId = '';
     beforeEach(async () => {
       let msg = {
-        value: "Error: hogehoge",
-        locale: "ja",
-        translationGroupId: "1",
+        value: 'Error: hogehoge',
+        locale: 'ja',
+        translationGroupId: '1',
         createdAt: timestamp
       };
       docId = await firestore.saveRawMessage(msg);
@@ -144,7 +145,7 @@ describe('FireStoreClient', () => {
     context('with valid docId', () => {
       it('should update the raw message', async () => {
         let msg = {
-          value: "Error: updated",
+          value: 'Error: updated',
         };
         await firestore.updateRawMessage(docId, msg);
         
@@ -160,15 +161,15 @@ describe('FireStoreClient', () => {
         let msg = {
           value: 'age',
         };
-        await expect(firestore.updateRawMessage(docid, msg)).rejects.toThrow("Error: 5 NOT_FOUND: No document to update: projects/logtest-demo/databases/(default)/documents/RawMessage/111");
+        await expect(firestore.updateRawMessage(docid, msg)).rejects.toThrow(`Error: 5 NOT_FOUND: No document to update: projects/${projectID}/databases/(default)/documents/RawMessage/111`);
       });
     });
   });
   describe('#getMatchedMsgIds', () => {
     beforeAll(async () => {
       let msg = {
-        value: "Error: This is test",
-        locale: "ja",
+        value: 'Error: This is test',
+        locale: 'ja',
         translationGroupId: '1',
         createdAt: timestamp
       };
@@ -196,8 +197,8 @@ describe('FireStoreClient', () => {
   describe('#getMatchedGroupId', () => {
     beforeAll(async () => {
       let msg = {
-        value: "Error: This is test",
-        locale: "ja",
+        value: 'Error: This is test',
+        locale: 'ja',
         translationGroupId: '5jbwzfqwrrxr7gZvKgqC',
         createdAt: timestamp
       };

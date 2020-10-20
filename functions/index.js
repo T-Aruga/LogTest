@@ -1,9 +1,19 @@
 const functions = require('firebase-functions');
 const f = functions.region('asia-northeast1');
+const cors = require('cors')({ origin: true });
 const Translator = require('./Translator');
 
 
+
 module.exports.translate = f.https.onRequest(async (req, res) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST');
+  if (req.method == "OPTIONS") {
+    cors(req, res, () => {
+      response.status(200).send()
+    });
+    return
+  }
   const body = req.body;
   const errorMsg = body.body;
   const locale = body.locale;
@@ -13,9 +23,9 @@ module.exports.translate = f.https.onRequest(async (req, res) => {
   const translator = new Translator(errorMsg, locale);
   try {
     const response = await translator.translate();
-    res.status(200).json(response); 
+    res.status(200).json(response);
   } catch (error) {
     console.log(error);
     res.status(500).json({ "error": error.toString() });
-  } 
+  }
 });

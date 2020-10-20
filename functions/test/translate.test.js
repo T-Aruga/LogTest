@@ -28,22 +28,22 @@ describe('#Translate', () => {
 
   beforeAll(async () => {
     let group = {
-      preffix: "Error:",
-      suffix: "test",
+      preffix: 'Error:',
+      suffix: 'test',
       createdAt: timestamp
     };
     let sub = {
-      locale: "ja",
-      template: "これはテストエラーです。",
-      nextAction: "CSに連絡してください。",
+      locale: 'ja',
+      template: 'これはテストエラーです。',
+      nextAction: 'CSに連絡してください。',
       createdAt: timestamp
     };
     const writeResult = await db.collection('TranslationGroup').add(group);
     const docId = writeResult.id;
-    await db.collection('TranslationGroup').doc(docId).collection("Translations").add(sub);
+    await db.collection('TranslationGroup').doc(docId).collection('Translations').add(sub);
     let msg = {
-      value: "Error: This is test",
-      locale: "ja",
+      value: 'Error: This is test',
+      locale: 'ja',
       translationGroupId: docId,
       createdAt: timestamp
     };
@@ -52,7 +52,7 @@ describe('#Translate', () => {
 
   afterEach(async () => {
     // Reset the database.
-    const colRef = db.collection("RawMessage");
+    const colRef = db.collection('RawMessage');
     await util.deleteCollection(db, colRef, 500);
   });
 
@@ -72,7 +72,7 @@ describe('#Translate', () => {
           expect(code).toBe(200);
           return {
             json: (res) => {
-              expect(res.result).toBe("これはテストエラーです。 CSに連絡してください。");
+              expect(res.result).toBe('これはテストエラーです。 CSに連絡してください。');
               done();
             }
           }
@@ -92,7 +92,7 @@ describe('#Translate', () => {
             expect(code).toBe(200);
             return {
               json: (res) => {
-                expect(res.result).toBe("Error: hogehoge");
+                expect(res.result).toBe('Error: hogehoge');
                 done();
               }
             }
@@ -111,7 +111,7 @@ describe('#Translate', () => {
             expect(code).toBe(200);
             return {
               json: (res) => {
-                expect(res.result).toBe("Error: fugafuga");
+                expect(res.result).toBe('Error: fugafuga');
                 done();
               }
             }
@@ -124,19 +124,19 @@ describe('#Translate', () => {
     context('when the translation template exists', () => {
       beforeAll(async () => { 
         let group = {
-          preffix: "ScriptParseError:",
-          suffix: "test",
+          preffix: 'ScriptParseError:',
+          suffix: 'test',
           createdAt: timestamp
         };
         let sub = {
-          locale: "ja",
-          template: "スクリプトエラーです。",
-          nextAction: "値を確認してください。",
+          locale: 'ja',
+          template: 'スクリプトエラーです。',
+          nextAction: '値を確認してください。',
           createdAt: timestamp
         };
         const writeResult = await db.collection('TranslationGroup').add(group);
         const docId = writeResult.id;
-        await db.collection('TranslationGroup').doc(docId).collection("Translations").add(sub);
+        await db.collection('TranslationGroup').doc(docId).collection('Translations').add(sub);
       });
       it('returns the translation template', async (done) => {
         const req = { body: { body: 'ScriptParseError: This is test', locale: 'ja' } };
@@ -146,7 +146,7 @@ describe('#Translate', () => {
             expect(code).toBe(200);
             return {
               json: (res) => {
-                expect(res.result).toBe("スクリプトエラーです。 値を確認してください。");
+                expect(res.result).toBe('スクリプトエラーです。 値を確認してください。');
                 done();
               }
             }
@@ -167,7 +167,7 @@ describe('#Translate', () => {
           expect(code).toBe(400);
           return {
             json: (res) => {
-              expect(res.error).toBe("body and locale are mandatory.");
+              expect(res.error).toBe('body and locale are mandatory.');
               done();
             }
           }
