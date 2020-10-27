@@ -40,6 +40,7 @@ describe('FireStoreClient', () => {
       createdAt: timestamp
     };
     await db.collection('RawMessage').add(msg);
+    await util.createTranslationGroup(db);
   });
 
   beforeEach(() => { 
@@ -52,12 +53,6 @@ describe('FireStoreClient', () => {
     const colRef = db.collection('RawMessage');
     await util.deleteCollection(db, colRef, 500);
   });
-
-  // afterAll(async () => {
-  //   // Reset the database.
-  //   const colRef = db.collection("TranslationGroup");
-  //   await util.deleteCollection(db, colRef, 500);
-  // });
 
   describe('#getMatchedTranslationGroup', () => {
     context('when the macthed translationGroup exists', () => {

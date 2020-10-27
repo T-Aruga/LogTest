@@ -39,6 +39,7 @@ describe('#Translate', () => {
       createdAt: timestamp
     };
     await db.collection('RawMessage').add(msg);
+    await util.createTranslationGroup(db);
   });
 
   afterEach(async () => {
@@ -46,12 +47,6 @@ describe('#Translate', () => {
     const colRef = db.collection('RawMessage');
     await util.deleteCollection(db, colRef, 500);
   });
-
-  // afterAll(async () => {
-  //   // Reset the database.
-  //   const colRef = db.collection("TranslationGroup");
-  //   await util.deleteCollection(db, colRef, 500);
-  // });
 
 
   context('when the matched translationGroupId is registered', () => {
@@ -115,7 +110,6 @@ describe('#Translate', () => {
         });
       });
     });
-    
   });
 
 });

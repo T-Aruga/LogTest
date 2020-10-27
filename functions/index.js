@@ -6,7 +6,14 @@ const Translator = require('./Translator');
 
 
 module.exports.translate = f.https.onRequest(async (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+  // cors対策
+  const host = req['headers']['x-original-host'];
+  console.log(req['headers']['x-original-host']);
+  if (host === 'localhost') {
+    res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+  } else if (host === 'console.roboticcrowd.com' || host === 'console.devk8s.com') {
+    res.set('Access-Control-Allow-Origin', 'https://' + host);
+  }
   res.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST');
   if (req.method == "OPTIONS") {
     cors(req, res, () => {

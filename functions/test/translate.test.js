@@ -1,14 +1,4 @@
-// Chai is a commonly used library for creating unit test suites. It is easily extended with plugins.
-// const chai = require('chai');
-// const assert = chai.assert;
-
-// Sinon is a library used for mocking or verifying function calls in JavaScript.
-// const sinon = require('sinon');
-
 const admin = require('firebase-admin');
-
-// Require and initialize firebase-functions-test in "online mode" with your project's
-// credentials and service account key.
 const projectConfig = {
   projectId: 'logtest-demo',
   databaseURL: 'https://logtest-demo.firebaseio.com'
@@ -18,15 +8,18 @@ const myFunctions = require('../index');
 const db = admin.firestore();
 const timestamp = admin.firestore.FieldValue.serverTimestamp();
 const util = require('./util');
+const axios = require('axios');
+const HOST = 'http://localhost:5000/logtest-demo/asia-northeast1';
 
 describe('#Translate', () => {
-
+  let endpoint;
   afterAll(() => {
     // Do cleanup tasks.
     test.cleanup();
   });
 
   beforeAll(async () => {
+    endpoint = HOST + '/translate';
     let group = {
       preffix: 'Error:',
       suffix: 'test',
@@ -48,6 +41,7 @@ describe('#Translate', () => {
       createdAt: timestamp
     };
     await db.collection('RawMessage').add(msg);
+    await util.createTranslationGroup(db);
   });
 
   afterEach(async () => {
@@ -56,69 +50,57 @@ describe('#Translate', () => {
     await util.deleteCollection(db, colRef, 500);
   });
 
-  // afterAll(async () => {
-  //   // Reset the database.
-  //   const colRef = db.collection("TranslationGroup");
-  //   await util.deleteCollection(db, colRef, 500);
-  // });
-
 
   context('when the matched translationGroupId is registered', () => {
-    it('returns the translation template', async (done) => {
-      const req = { body: { body: 'Error: This is test', locale: 'ja' } };
-      
-      const res = {
-        status: (code) => {
-          expect(code).toBe(200);
-          return {
-            json: (res) => {
-              expect(res.result).toBe('これはテストエラーです。 CSに連絡してください。');
-              done();
-            }
-          }
-        }
+    it('returns the translation template', async () => {
+      const errorMsg = 'Error: This is test';
+      const locale = 'ja';
+      const options = {
+        method: 'post',
+        url: endpoint,
+        data: {
+          body: errorMsg,
+          locale: locale
+        },
       };
-      
-      myFunctions.translate(req, res);
+      return axios(options).then(response => {
+        expect(response.data.result).toBe('これはテストエラーです。 CSに連絡してください。');
+      });
     });
   });
   context('when the matched translationGroupId is not registered', () => {
     context('when the matched translationGroup does not exist', () => { 
-      it('returns the raw error message', async (done) => {
-        const req = { body: { body: 'Error: hogehoge', locale: 'ja' } };
-        
-        const res = {
-          status: (code) => {
-            expect(code).toBe(200);
-            return {
-              json: (res) => {
-                expect(res.result).toBe('Error: hogehoge');
-                done();
-              }
-            }
-          }
+      it('returns the raw error message', async () => {
+        const errorMsg = 'Error: hogehoge';
+        const locale = 'ja';
+        const options = {
+          method: 'post',
+          url: endpoint,
+          data: {
+            body: errorMsg,
+            locale: locale
+          },
         };
-        
-        myFunctions.translate(req, res);
+        return axios(options).then(response => {
+          expect(response.data.result).toBe('Error: hogehoge');
+        });
       });
     });
     context('when the translation template does not exist', () => { 
-      it('returns the raw error message', async (done) => {
-        const req = { body: { body: 'Error: fugafuga', locale: 'ja' } };
-        
-        const res = {
-          status: (code) => {
-            expect(code).toBe(200);
-            return {
-              json: (res) => {
-                expect(res.result).toBe('Error: fugafuga');
-                done();
-              }
-            }
-          }
+      it('returns the raw error message', async () => {
+        const errorMsg = 'Error: fugafuga';
+        const locale = 'ja';
+        const options = {
+          method: 'post',
+          url: endpoint,
+          data: {
+            body: errorMsg,
+            locale: locale
+          },
         };
-        
-        myFunctions.translate(req, res);
+        return axios(options).then(response => {
+          expect(response.data.result).toBe('Error: fugafuga');
+        });
       });
     });
     context('when the translation template exists', () => {
@@ -138,43 +120,36 @@ describe('#Translate', () => {
         const docId = writeResult.id;
         await db.collection('TranslationGroup').doc(docId).collection('Translations').add(sub);
       });
-      it('returns the translation template', async (done) => {
-        const req = { body: { body: 'ScriptParseError: This is test', locale: 'ja' } };
-        
-        const res = {
-          status: (code) => {
-            expect(code).toBe(200);
-            return {
-              json: (res) => {
-                expect(res.result).toBe('スクリプトエラーです。 値を確認してください。');
-                done();
-              }
-            }
-          }
+      it('returns the translation template', async () => {
+        const errorMsg = 'ScriptParseError: This is test';
+        const locale = 'ja';
+        const options = {
+          method: 'post',
+          url: endpoint,
+          data: {
+            body: errorMsg,
+            locale: locale
+          },
         };
-        
-        myFunctions.translate(req, res);
+        return axios(options).then(response => {
+          expect(response.data.result).toBe('スクリプトエラーです。 値を確認してください。');
+        });
       });
     });
-    
   });
   context('when request body is blank', () => {
-    it('throws error 400', async (done) => {
-      const req = { body: '' };
-      
-      const res = {
-        status: (code) => {
-          expect(code).toBe(400);
-          return {
-            json: (res) => {
-              expect(res.error).toBe('body and locale are mandatory.');
-              done();
-            }
-          }
-        }
+    it('throws error 400', async () => {
+      const errorMsg = '';
+      const locale = '';
+      const options = {
+        method: 'post',
+        url: endpoint,
+        data: {
+          body: errorMsg,
+          locale: locale
+        },
       };
-      
-      myFunctions.translate(req, res);
+      await expect(axios(options)).rejects.toThrow('Request failed with status code 400');
     });
   });
 

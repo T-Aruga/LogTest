@@ -1,3 +1,5 @@
+const translationgroup = require('./TranslationGroup')
+
 
 module.exports.deleteCollection = (db, collectionRef, batchSize) => {
   const query = collectionRef.orderBy('__name__').limit(batchSize);
@@ -5,6 +7,12 @@ module.exports.deleteCollection = (db, collectionRef, batchSize) => {
       deleteQueryBatch(db, query, batchSize, resolve, reject);
   });
 }
+
+module.exports.createTranslationGroup = async (db) => {
+    translationgroup.forEach(group => {
+      db.collection('TranslationGroup').add(group);
+    });
+  }
 
 //削除のメインコード
 const deleteQueryBatch = (db, query, batchSize, resolve, reject) => {
