@@ -1,13 +1,13 @@
+require('dotenv').config();
 const admin = require('firebase-admin');
 admin.initializeApp({
     credential: admin.credential.cert('./test/logtest-demo-firebase-adminsdk-b246u-1df060c162.json'),
-    databaseURL: 'https://logtest-demo.firebaseio.com',
+    databaseURL: process.env.TEST_DATABASE_URL,
 });
-const db = admin.firestore();
 const FireStoreClient = require('../FireStoreClient');
+const db = admin.firestore();
 const timestamp = admin.firestore.FieldValue.serverTimestamp();
 const util = require('./util');
-const projectID = 'logtest-demo';
 
 
 
@@ -20,7 +20,7 @@ describe('FireStoreClient', () => {
 
   beforeAll(async () => {
     let group = {
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: timestamp
     };
@@ -44,7 +44,7 @@ describe('FireStoreClient', () => {
   });
 
   beforeEach(() => { 
-    firestore = new FireStoreClient(db);
+    firestore = new FireStoreClient;
   });
 
 
@@ -59,7 +59,7 @@ describe('FireStoreClient', () => {
       it('returns the matched translationGroup', async () => {
         const errorMsg = 'Error: This is test';
         return firestore.getMatchedTranslationGroup(errorMsg).then(response => {
-          expect(response.preffix).toBe('Error:');
+          expect(response.prefix).toBe('Error:');
           expect(response.suffix).toBe('test');
         });
       });
@@ -77,7 +77,7 @@ describe('FireStoreClient', () => {
     let docId = '';
     beforeAll(async () => {
       let group = {
-        preffix: 'ScriptParseError:',
+        prefix: 'ScriptParseError:',
         suffix: 'test',
         createdAt: timestamp
       };
@@ -148,15 +148,6 @@ describe('FireStoreClient', () => {
           const data = response.data();
           expect(data.value).toBe('Error: updated');
         });
-      });
-    });
-    context('with invalid docId', () => {
-      it('should rejects with not found error', async () => {
-        let docid = '111';
-        let msg = {
-          value: 'age',
-        };
-        await expect(firestore.updateRawMessage(docid, msg)).rejects.toThrow(`Error: 5 NOT_FOUND: No document to update: projects/${projectID}/databases/(default)/documents/RawMessage/111`);
       });
     });
   });

@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 const projectConfig = {
   projectId: 'logtest-demo',
-  databaseURL: 'https://logtest-demo.firebaseio.com'
+  databaseURL: process.env.TEST_DATABASE_URL
 };
 const test = require('firebase-functions-test')(projectConfig, './test/logtest-demo-firebase-adminsdk-b246u-1df060c162.json');
 const Translator = require('../Translator');
@@ -19,7 +19,7 @@ describe('#Translate', () => {
 
   beforeAll(async () => {
     let group = {
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: timestamp
     };
@@ -55,7 +55,7 @@ describe('#Translate', () => {
       const locale = 'ja';
       const translator = new Translator(errorMsg, locale);
 
-      return translator.translate().then(response => {
+      return translator.translate(errorMsg, locale).then(response => {
         expect(response.result).toBe('これはテストエラーです。 CSに連絡してください。');
       });
     });
@@ -67,7 +67,7 @@ describe('#Translate', () => {
         const locale = 'ja';
         const translator = new Translator(errorMsg, locale);
 
-        return translator.translate().then(response => {
+        return translator.translate(errorMsg, locale).then(response => {
           expect(response.result).toBe('Error: hogehoge');
         });
       });
@@ -78,7 +78,7 @@ describe('#Translate', () => {
         const locale = 'ja';
         const translator = new Translator(errorMsg, locale);
 
-        return translator.translate().then(response => {
+        return translator.translate(errorMsg, locale).then(response => {
           expect(response.result).toBe('Error: fugafuga');
         });
       });
@@ -86,7 +86,7 @@ describe('#Translate', () => {
     context('when the translation template exists', () => {
       beforeAll(async () => { 
         let group = {
-          preffix: 'ScriptParseError:',
+          prefix: 'ScriptParseError:',
           suffix: 'test',
           createdAt: timestamp
         };
@@ -105,7 +105,7 @@ describe('#Translate', () => {
         const locale = 'ja';
         const translator = new Translator(errorMsg, locale);
 
-        return translator.translate().then(response => {
+        return translator.translate(errorMsg, locale).then(response => {
           expect(response.result).toBe('スクリプトエラーです。 値を確認してください。');
         });
       });

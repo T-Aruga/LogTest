@@ -1,27 +1,22 @@
+const admin = require('firebase-admin');
+const db = admin.firestore();
 
 
 module.exports = class FireStoreClient {
-  constructor(db) {
+  constructor() {
     this.db = db;
   };
   async getMatchedTranslationGroup(errorMsg) {
     let result = {};
-    let translationGroup = {};
-    let docId = "";
-    await this.db.collection('TranslationGroup').where('preffix', '<=', errorMsg).orderBy('preffix').get()
+    await this.db.collection('TranslationGroup').where('prefix', '<=', errorMsg).orderBy('prefix').get()
       .then(querySnapshot => {
         const docs = querySnapshot.docs;
-        if (docs.length) { 
-          docId = docs.slice(-1)[0].id;
-          translationGroup = docs.slice(-1)[0].data();
+        if (docs.length) {
+          result = docs.slice(-1)[0].data();
+          result.docId = docs.slice(-1)[0].id;
         }
-      })
-      .catch(error => {
-        throw new Error(error);
       });
-    if (docId) result.docId = docId;
-    Object.assign(result, translationGroup);
-  
+    
     return result;
   };
 
@@ -30,29 +25,21 @@ module.exports = class FireStoreClient {
     await this.db.collection('TranslationGroup').doc(docId).collection('Translations').where('locale', '==', locale).get()
       .then(querySnapshot => {
         const docs = querySnapshot.docs;
-        if (docs.length) { 
+        if (docs.length) {
           translation = docs[0].data();
         }
-      })
-      .catch(error => {
-        throw new Error(error);
       });
+    
     return translation;
   };
 
   async saveRawMessage(msgObj) {
-    const writeResult = await this.db.collection('RawMessage').add(msgObj)
-      .catch(error => {
-        throw new Error(error);
-      });
+    const writeResult = await this.db.collection('RawMessage').add(msgObj);
     return writeResult.id;
   };
 
   async updateRawMessage(msgId, msgObj) {
-    await this.db.doc(`RawMessage/${msgId}`).update(msgObj)
-      .catch(error => {
-        throw new Error(error);
-      });
+    await this.db.doc(`RawMessage/${msgId}`).update(msgObj);
   };
 
   async getMatchedMsgIds(errorMsg) {
@@ -62,9 +49,6 @@ module.exports = class FireStoreClient {
         querySnapshot.forEach(doc => {
           msgIds.push(doc.id);
         });
-      })
-      .catch(error => {
-        throw new Error(error);
       });
     
     return msgIds;
@@ -79,11 +63,7 @@ module.exports = class FireStoreClient {
         if (docs.length) {
           message = docs[0].data();
         }
-      })
-      .catch(error => {
-        throw new Error(error);
       });
-    
     if (message.translationGroupId) groupId = message.translationGroupId;
     
     return groupId;

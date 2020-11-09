@@ -1,41 +1,39 @@
 const admin = require('firebase-admin');
 admin.initializeApp();
-const db = admin.firestore();
 const timestamp = admin.firestore.FieldValue.serverTimestamp();
 const FireStoreClient = require('./FireStoreClient');
 
 
 module.exports = class Translator {
-  constructor(msg, locale) {
-    this.msg = msg;
-    this.locale = locale;
-  };
 
-  async translate() {
+  async translate(msg, locale) {
     let response = {};
-    const errorMsg = this.msg;
-    const locale = this.locale;
+    const errorMsg = msg;
     const rawMessage = {
       value: errorMsg,
       locale: locale,
-      translationGroupId: "1",
+      translationGroupId: null,
       createdAt: timestamp
     };
-    const firestore = new FireStoreClient(db);
+    const firestore = new FireStoreClient;
     const matchedTranslationGroupId = await firestore.getMatchedGroupId(errorMsg);
+    // console.log('matchedTranslationGroupId: ', matchedTranslationGroupId);
+    // let tem = 'これは ${val} テストエラーやで'
+    // let matcher = 'this is (.*) test error'
+    // this._parseTemplate(errorMsg, matcher, tem)
 
-    if (matchedTranslationGroupId && matchedTranslationGroupId !== '1') {
+    if (matchedTranslationGroupId) {
       const translationData = await firestore.getTranslationTemplate(matchedTranslationGroupId, locale);
       response.result = `${translationData.template} ${translationData.nextAction}`;
       return response;
     }
     const translationGroup = await firestore.getMatchedTranslationGroup(errorMsg);
 
-    const preffix = translationGroup.preffix;
+    const prefix = translationGroup.prefix;
     const suffix = translationGroup.suffix;
     const groupId = translationGroup.docId;
 
-    if (errorMsg.startsWith(preffix) && errorMsg.endsWith(suffix)) {
+    if (errorMsg.startsWith(prefix) && errorMsg.endsWith(suffix)) {
       const translation = await firestore.getTranslationTemplate(groupId, locale);
       if (!Object.keys(translation).length) {
         firestore.saveRawMessage(rawMessage);
@@ -47,11 +45,27 @@ module.exports = class Translator {
         firestore.updateRawMessage(msgId, { translationGroupId: groupId });
       });
       response.result = `${translation.template} ${translation.nextAction}`;
+      return response;
       
     } else {
       await firestore.saveRawMessage(rawMessage);
       response.result = errorMsg;
+      return response;
     }
-    return response;
   }; 
+
+  _parseTemplate(errMsg, matcher, template) {
+    const matcherRegex = new RegExp(matcher);
+    const matchResult = errMsg.match(matcherRegex);
+    if (matchResult) {
+      console.log(matchResult[1])
+      const matchStr = matchResult[1]
+      const convertedTemplate = template.replace(/\${(val)}/, matchStr);
+      console.log(convertedTemplate);
+      return convertedTemplate
+    } else {
+      console.log("Failed!!!");
+      return template
+    }        
+  };
 }

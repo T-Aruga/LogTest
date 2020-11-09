@@ -1,76 +1,76 @@
 const SampleTranslationGroup = [
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },
     { 
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: new Date('2020-02-10 12:00:00')
     },

@@ -1,10 +1,9 @@
+require('dotenv').config();
 const admin = require('firebase-admin');
-const projectConfig = {
-  projectId: 'logtest-demo',
-  databaseURL: 'https://logtest-demo.firebaseio.com'
-};
-const test = require('firebase-functions-test')(projectConfig, './test/logtest-demo-firebase-adminsdk-b246u-1df060c162.json');
-const myFunctions = require('../index');
+admin.initializeApp({
+  credential: admin.credential.cert('./test/logtest-demo-firebase-adminsdk-b246u-1df060c162.json'),
+  databaseURL: process.env.TEST_DATABASE_URL,
+});
 const db = admin.firestore();
 const timestamp = admin.firestore.FieldValue.serverTimestamp();
 const util = require('./util');
@@ -21,7 +20,7 @@ describe('#Translate', () => {
   beforeAll(async () => {
     endpoint = HOST + '/translate';
     let group = {
-      preffix: 'Error:',
+      prefix: 'Error:',
       suffix: 'test',
       createdAt: timestamp
     };
@@ -106,7 +105,7 @@ describe('#Translate', () => {
     context('when the translation template exists', () => {
       beforeAll(async () => { 
         let group = {
-          preffix: 'ScriptParseError:',
+          prefix: 'ScriptParseError:',
           suffix: 'test',
           createdAt: timestamp
         };

@@ -1,76 +1,76 @@
 const SampleTranslationGroup = [
   { 
-    preffix: 'dummy',
+    prefix: 'dummy',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: 'error:',
+    prefix: 'error:',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: 'ERROR:',
+    prefix: 'ERROR:',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: 'aaaaaaa',
+    prefix: 'aaaaaaa',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: 'zzzzzzzzz',
+    prefix: 'zzzzzzzzz',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: '999999999',
+    prefix: '999999999',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: '1111111111',
+    prefix: '1111111111',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: 'ScriptError:',
+    prefix: 'ScriptError:',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: 'Error',
+    prefix: 'Error',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: 'Error::',
+    prefix: 'Error::',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: 'Errr:',
+    prefix: 'Errr:',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: 'Erroro',
+    prefix: 'Erroro',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: 'Errorz',
+    prefix: 'Errorz',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: 'aError:',
+    prefix: 'aError:',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },
   { 
-    preffix: 'Error:hoge',
+    prefix: 'Error:hoge',
     suffix: 'test',
     createdAt: new Date('2020-02-10 12:00:00')
   },

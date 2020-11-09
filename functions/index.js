@@ -27,9 +27,9 @@ app.post('/', async (req, res) => {
   if (!errorMsg || !locale) {
     return res.status(400).json({ "error": "body and locale are mandatory." });
   }
-  const translator = new Translator(errorMsg, locale);
+  const translator = new Translator;
   try {
-    const response = await translator.translate();
+    const response = await translator.translate(errorMsg, locale);
     res.status(200).json(response);
   } catch (error) {
     console.log(error);

@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 admin.initializeApp({
     credential: admin.credential.cert('functions/test/logtest-demo-firebase-adminsdk-b246u-1df060c162.json'),
-    databaseURL: 'https://logtest-demo.firebaseio.com',
+    databaseURL: process.env.TEST_DATABASE_URL,
 });
 const db = admin.firestore();
 const colRef = db.collection('RawMessage');
@@ -31,7 +31,7 @@ module.exports.createTranslation = async (TranslationGroup, Translation) => {
 
 module.exports.createTestData = async () => {
   let group = {
-    preffix: 'Error:',
+    prefix: 'Error:',
     suffix: 'test',
     createdAt: timestamp
   };

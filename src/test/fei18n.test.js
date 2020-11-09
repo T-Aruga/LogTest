@@ -44,7 +44,7 @@ describe('#translate', () => {
     context('when the translation template exists', () => {
       beforeAll(async () => {
         let group = {
-          preffix: 'ScriptParseError:',
+          prefix: 'ScriptParseError:',
           suffix: 'test',
           createdAt: new Date('2020-02-10 12:00:00')
         };
